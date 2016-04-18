@@ -61,6 +61,8 @@ public class Server extends Chat {
                 client.start();
                 while (client.getUserName() == null);
                 sendMessage(getUsers());
+                textArea.append("Szerver üzenet: "+client.getUserName() + " csatlakozott...");
+                sendMessage("Szerver üzenet: "+client.getUserName() + " csatlakozott...");
             }
         } catch (IOException ex) {
             if (!isClosing()) {
@@ -139,7 +141,7 @@ public class Server extends Chat {
         return sentBy;
     }
 
-    protected void setSentBy(int sentBy) {
+    public void setSentBy(int sentBy) {
         this.sentBy = sentBy;
     }
 

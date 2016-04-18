@@ -26,8 +26,10 @@ public class InitDialog extends javax.swing.JDialog {
         ipAddress = null;
         initComponents();
         setLocationRelativeTo(null);
-        jTFUserName.requestFocus();
+        jTFIPAddress.requestFocus();
+        jTFIPAddress.selectAll();
         this.getRootPane().setDefaultButton(btnOk);
+        setTitle("Chat");
     }
 
     public boolean isServer() {
@@ -139,25 +141,32 @@ public class InitDialog extends javax.swing.JDialog {
     private void jRBtnClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBtnClientActionPerformed
         if (jRBtnClient.isSelected()) {
             server = false;
-            jTFUserName.requestFocus();
             jTFIPAddress.setVisible(true);
+//            if (jTFUserName.getText().length() > 0) {
+            jTFIPAddress.requestFocus();
+            jTFIPAddress.selectAll();
+//            } 
+
         }
 
     }//GEN-LAST:event_jRBtnClientActionPerformed
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
         name = jTFUserName.getText();
-        if (name.length() > 0) {
+        if (name.matches("[\\w]+")) {
 
-            if (jRBtnClient.isSelected()
-                    && (jTFIPAddress.getText()
-                    .matches("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"))
-                    || jTFIPAddress.getText().equals("localhost")) {
-                ipAddress = jTFIPAddress.getText();
-                setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(this, "Nem jó az IP cím!", "Input error!", JOptionPane.ERROR_MESSAGE);
-            }
+            if (jRBtnClient.isSelected()) {
+
+                if (jTFIPAddress.getText().matches("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")
+                        || jTFIPAddress.getText().equals("localhost")) {
+                    ipAddress = jTFIPAddress.getText();
+                    setVisible(false);
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Nem jó az IP cím!", "Input error!", JOptionPane.ERROR_MESSAGE);
+                }
+            }else setVisible(false);
+
         } else {
             JOptionPane.showMessageDialog(this, "Nem jó a név!", "Input error!", JOptionPane.ERROR_MESSAGE);
         }

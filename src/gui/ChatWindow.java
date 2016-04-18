@@ -5,6 +5,7 @@
  */
 package gui;
 
+import chat.server.Server;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
@@ -56,7 +57,7 @@ public class ChatWindow extends javax.swing.JFrame {
                 }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this,
-                        "Hiba történt a " + (dialog.isServer() ? "szerver" : "kliens") + " létrehozása közben!\n\"" + ex.getMessage()+"\"",
+                        "Hiba történt a " + (dialog.isServer() ? "szerver" : "kliens") + " létrehozása közben!\n\"" + ex.getMessage() + "\"",
                         "Váratlan hiba történt",
                         JOptionPane.ERROR_MESSAGE);
                 dialog.setVisible(true);
@@ -98,10 +99,12 @@ public class ChatWindow extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane1.setAutoscrolls(true);
         jScrollPane1.setPreferredSize(new java.awt.Dimension(350, 400));
 
         tAChat.setColumns(20);
         tAChat.setRows(5);
+        tAChat.setFocusable(false);
         jScrollPane1.setViewportView(tAChat);
 
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -110,6 +113,7 @@ public class ChatWindow extends javax.swing.JFrame {
         jPanel1.add(tFSend);
 
         btnSend.setText("Küldés");
+        btnSend.setFocusable(false);
         btnSend.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSendActionPerformed(evt);
@@ -125,6 +129,7 @@ public class ChatWindow extends javax.swing.JFrame {
             public String getElementAt(int i) { return strings[i]; }
         });
         jListUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jListUsers.setFocusable(false);
         jListUsers.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jListUsersMouseClicked(evt);
@@ -142,8 +147,12 @@ public class ChatWindow extends javax.swing.JFrame {
 
             if (tFSend.getText().length() > 0) {
                 String text = userName + ":" + tFSend.getText();
+                if (chatUser instanceof Server) {
+                    ((Server) chatUser).setSentBy(0);
+                }
                 chatUser.sendMessage(text);
                 tFSend.setText("");
+                tFSend.requestFocus();
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this,
